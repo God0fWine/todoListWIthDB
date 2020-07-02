@@ -8,8 +8,6 @@ import './todo.css';
 
 export default function (todos) {
 
-
-    console.log(todos)
     return (
         <ListItem className="list-item">
             <ListItemText
@@ -22,9 +20,7 @@ export default function (todos) {
                 fetch(`http://localhost:3001/task/${todos.todoId}`, {
                     method: 'delete'
                 })
-                console.log(`deleted id ${todos.todoId}`)
                 todos.updateState(todos.todoId);
-
             }
             }>
                 <DeleteIcon />

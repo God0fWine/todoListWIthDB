@@ -31,6 +31,7 @@ export default class Newtodo extends Component {
         this.setState(() => {
             return {todo : ''}
         })
+        this.props.onAdd(this.state.todo)
     }
 
     render() {
