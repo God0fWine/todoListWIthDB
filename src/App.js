@@ -14,10 +14,10 @@ export default class App extends Component {
     };
 
     getTodos = async () => {
-        let todos = await fetch("http://localhost:3001/task/alltodo", {
-        }).then((res) => {
-            return res.json();
-        })
+        let todos = await fetch("http://localhost:3001/task/alltodo")
+            .then((res) => {
+                return res.json();
+            })
         this.setState(() => {
             return { todos: todos }
         })
@@ -25,26 +25,16 @@ export default class App extends Component {
 
     deletedItem = (todoId) => {
         let arr = this.state.todos;
-
-        for (let item in arr) {
-            if (arr[item].id === todoId) {
-                let arr1 = arr.slice(0, item);
-                let arr2 = arr.slice(item + 1)
-
-                this.setState(({ todos }) => {
-                    return { todos: [...arr1, ...arr2] }
-                })
-            }
-        }
+        let newArr = arr.filter((item) => item.id !== todoId);
+        this.setState(({ todos }) => {
+            return { todos: newArr }
+        })
     }
 
-    addedItem = (text) => {
-        let todo = this.state.todos;
-
-        // let newId = todo.length ? (todo[todo.length - 1].id + 1) : 1;
-        let item = {id: todo[todo.length -1] + 1, text: text}
-        this.setState(({todos}) => {
-            return {todos: [...todos, item]}
+    addedItem = (id, text) => {
+        let item = { id: id, text: text }
+        this.setState(({ todos }) => {
+            return { todos: [...todos, item] }
         })
     }
 
@@ -68,7 +58,7 @@ export default class App extends Component {
 
         if (prevState.todos) {
             if (prevState.todos.length !== this.state.todos.length) {
-                this.getTodos();
+                // this.getTodos();
                 this.setState((listItems) => {
                     return { listItems: [] }
                 })
@@ -84,7 +74,7 @@ export default class App extends Component {
                 <div>
                     <h2> My Todo List</h2>
                     <TodoList todos={this.state.listItems} />
-                    <Newtodo onAdd={this.addedItem}/>
+                    <Newtodo onAdd={this.addedItem} />
                 </div>
             </div >
         );

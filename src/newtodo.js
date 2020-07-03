@@ -8,7 +8,8 @@ import './newtodo.css';
 export default class Newtodo extends Component {
 
     state = {
-        todo: ''
+        todo: '',
+        id: ''
     };
 
     onLabelChange = (event) => {
@@ -18,20 +19,32 @@ export default class Newtodo extends Component {
         })
     }
 
-    onSubmit = () => {
-        let rB = {'text': this.state.todo};
-        if(this.state.todo === '') return 
-        fetch('http://localhost:3001/task/newtodo', {
+    getNewId = async () => {
+        let rB = { 'text': this.state.todo };
+
+        let newId = await fetch('http://localhost:3001/task/newtodo', {
             headers: {
                 'Content-Type': 'application/json'
             },
             method: 'post',
             body: JSON.stringify(rB)
+        }).then((res) => {
+            let result = res.text();
+            return result;
         })
+        this.setState(({id}) => {
+            return {id: +newId}
+        })
+    }
+
+    onSubmit = async () => {
+        if (this.state.todo === '') return;
+        await this.getNewId();
+        console.log(this.state.id)
+        this.props.onAdd(this.state.id, this.state.todo)
         this.setState(() => {
-            return {todo : ''}
+            return { todo: '' }
         })
-        this.props.onAdd(this.state.todo)
     }
 
     render() {
