@@ -19,8 +19,14 @@ app.get("/task/alltodo", (req, res) => {
   })
 });
 
-app.delete("/task/:todoid", (req, res) => {
+app.delete("/task/del/:todoid", (req, res) => {
   connection.query(`DELETE FROM todo WHERE id = ?`, [req.params.todoid], function (err, data) {
+    if (err) { console.log(err); return }
+  })
+})
+
+app.post("/task/imp/:todoId", (req) => {
+  connection.query("UPDATE todo SET important = NOT important WHERE id = ?", [req.params.todoId], function (err, data) {
     if (err) { console.log(err); return }
   })
 })
@@ -33,15 +39,10 @@ app.post("/task/newtodo", (req, res) => {
       console.log('error_______');
       return;
     }
-    res.text(results.insertId);
-  // connection.query(`INSERT INTO todo SET ?`, [req.body.text], function (error, results, fields) {
-  //   if (error) throw error;
-  //   console.log(results.insertId);
-  // });
-  // console.log(data.insertId + "_______--s");
-  // return data.insertId;
+    res.json(results.insertId);
+  })
 })
-})
+
 
 // установить порт, и слушать запросы
 app.listen(3001, () => {

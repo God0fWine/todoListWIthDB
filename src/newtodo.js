@@ -40,7 +40,6 @@ export default class Newtodo extends Component {
     onSubmit = async () => {
         if (this.state.todo === '') return;
         await this.getNewId();
-        console.log(this.state.id)
         this.props.onAdd(this.state.id, this.state.todo)
         this.setState(() => {
             return { todo: '' }

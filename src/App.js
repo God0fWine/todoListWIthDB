@@ -31,6 +31,15 @@ export default class App extends Component {
         })
     }
 
+    onImportant = (todoId) => {
+        let arr = this.state.todos;
+        let idx = arr.findIndex((item) => item.id === todoId);
+        arr[idx].important = !arr[idx].important;
+        this.setState(({ todos }) => {
+            return {todos: arr}
+        })
+    }
+
     addedItem = (id, text) => {
         let item = { id: id, text: text }
         this.setState(({ todos }) => {
@@ -41,7 +50,7 @@ export default class App extends Component {
     viewTodos() {
         for (let item in this.state.todos) {
             this.setState((prevState) => {
-                let todo = <Todo todo={this.state.todos[item].text} todoId={this.state.todos[item].id} updateState={this.deletedItem} key={this.state.todos[item].id} />
+                let todo = <Todo todo={this.state.todos[item].text} todoId={this.state.todos[item].id} imp={this.state.todos[item].important} onDelete={this.deletedItem} onImportant={this.onImportant} key={this.state.todos[item].id} />
                 return {
                     listItems: [...prevState.listItems, todo]
                 }
@@ -58,7 +67,6 @@ export default class App extends Component {
 
         if (prevState.todos) {
             if (prevState.todos.length !== this.state.todos.length) {
-                // this.getTodos();
                 this.setState((listItems) => {
                     return { listItems: [] }
                 })
